@@ -1,0 +1,1 @@
+always set Strict-Transport-Security "max-age=300; includeSubDomains; preload" 

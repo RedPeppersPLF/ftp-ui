@@ -1,0 +1,37 @@
+.main-navbar {
+  display: flex;
+  align-items: center;
+  top: 0px;
+  width: 100vw;
+  height: 9vh;
+  line-height: 9vh;
+  position: fixed;
+  background-color: #ffbe0b;
+  border-bottom: 1px solid #ececec;
+  z-index: 2;
+  h3 {
+    font-weight: 300;
+    margin-left: 40px;
+    font-family: "Oswald";
+  }
+  .navbar-buttons {
+    margin-left: 78vw;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0px;
+  }
+  .navbar-buttons-icon {
+    margin: 0;
+    height: 100px;
+    width: 75px;
+    text-align: center;
+    transition: all 0.2s linear;
+    svg {
+      vertical-align: middle;
+    }
+    &:hover {
+      background-color: #dfa920;
+    }
+  }
+}

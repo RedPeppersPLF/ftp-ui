@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;600&display=swap');
+
+* {
+    font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+}
+.App {
+    position: relative;
+}
+.dashboard {
+    margin-top: 160px;
+}
