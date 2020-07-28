@@ -10,8 +10,7 @@ const instance = Axios.create({
 });
 
 function listAllDirectoriesOnWorkspace(username: string, password: string, path: string) {
-  const ftpPath = path.substr(0,1)==="/"?path.substr(1):path;
-  const data = querystring.stringify({ 'username': username, 'password': password, 'path': "/"+Buffer.from(ftpPath,'base64').toString('utf-8')});
+  const data = querystring.stringify({ 'username': username, 'password': password, 'path': path});
   return instance.post(
     "/ftp-back/ftp",
     data

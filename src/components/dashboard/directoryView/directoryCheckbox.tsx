@@ -39,14 +39,14 @@ class DirectoryCheckbox extends React.Component<{index: number, name: string, ty
         break;
       }
     } else if (type === FileType.Directory) {
-      thumbnail = <div className="folder"><a href={"/dashboard/"+Buffer.from(name).toString('base64')}><img alt="Folder" src={Folder} /></a></div>;
+      thumbnail = <div className="folder"><a href={"/dashboard"+(name===""?"/":"/"+Buffer.from(name).toString('base64'))}><img alt="Folder" src={Folder} /></a></div>;
     }
     return thumbnail;
   }
   
   render() {
     return (
-      <Box className={"second"+this.state.checkClass} onClick={this.check.bind(this)}>
+      <Box className={"second"+this.state.checkClass} onClick={() => {this.check()}}>
       {this.fetchThumbnail(
         this.props.name,
         this.props.type

@@ -20,30 +20,41 @@ type FileInfos = {
   modifiedAt: string;
 };
 
-class DirectoryView extends React.Component<{ path: string },{ files: Array<FileInfos>; loading: boolean; path: string }> {
+class DirectoryView extends React.Component<{ path: string }, { files: Array<FileInfos>; listLoading: boolean; elementNumberstoDisplay: number; path: string }> {
   state = {
     files: new Array<FileInfos>(),
-    loading: true,
-    path:
-      this.props.path.substr(0, 1) === "/"
-        ? this.props.path.substr(1)
-        : this.props.path,
+    listLoading: true,
+    elementNumberstoDisplay: 0,
+    path: this.props.path.substr(0,1) === "/"?Buffer.from(this.props.path.substr(1),'base64').toString('utf-8'):Buffer.from(this.props.path,'base64').toString('utf-8')
   };
 
   elementList = new Array<JSX.Element>();
 
   componentDidMount() {
-    this.setState({ loading: true }, () => {
       listAllDirectoriesOnWorkspace("Guest", "", this.state.path).then(
         (response) => {
           response.data.files.forEach(
             async (file: FileInfos, index: number, array: FileInfos[]) => {
+              let metadata = "";
+              if (file.type === FileType.Directory) {
+                await listAllDirectoriesOnWorkspace(
+                  "Guest",
+                  "",
+                  this.state.path+"/"+file.name
+                ).then((response) => {
+                  metadata = response.data.files.length.toString();
+                });
+              } else if(file.type === FileType.File){
+                metadata = this.numberToReadableSize(file.size);
+              }
               this.setState(
                 (previousState) => ({
                   files: previousState.files.concat(file),
+                  elementNumberstoDisplay: array.length
                 }),
                 () => {
-                  this.setState({ loading: false });
+                  this.setState({ listLoading: false });
+                  console.log(index)
                   this.elementList.push(
                     <Box key={index} className="element-wrapper">
                       <div className="first">
@@ -58,26 +69,14 @@ class DirectoryView extends React.Component<{ path: string },{ files: Array<File
                       </div>
                       <DirectoryCheckbox
                         index={index}
-                        name={
-                          Buffer.from(this.state.path, "base64").toString(
-                            "utf-8"
-                          ) +
-                          "/" +
-                          this.state.files[index].name
-                        }
-                        type={this.state.files[index].type}
+                        name={this.state.path+"/"+file.name}
+                        type={file.type}
                       />
                       <div className="third">
                         <p className="element-name">
-                            {this.state.files[index].name}
+                          {file.name}
                         </p>
-                        <p className="element-size">
-                          {this.state.files[index].type === FileType.File
-                            ? this.numberToReadableSize(
-                                this.state.files[index].size
-                              )
-                            : this.fetchSubFolder(this.state.files[index].name)}
-                        </p>
+                        <p className="element-size">{metadata}</p>
                       </div>
                     </Box>
                   );
@@ -87,25 +86,6 @@ class DirectoryView extends React.Component<{ path: string },{ files: Array<File
           );
         }
       );
-    });
-  }
-
-  fetchSubFolder(folderName: string) {
-    let nbOfSubElements = 0;
-    this.setState({ loading: false }, async () => {
-      await listAllDirectoriesOnWorkspace(
-        "Guest",
-        "",
-        Buffer.from(
-          Buffer.from(this.state.path, "base64").toString("utf-8") +
-            "/" +
-            folderName
-        ).toString("base64")
-      ).then((response) => {
-        nbOfSubElements = response.data.files.length;
-      });
-    });
-    return nbOfSubElements;
   }
 
   numberToReadableSize(size: number) {
@@ -119,12 +99,18 @@ class DirectoryView extends React.Component<{ path: string },{ files: Array<File
   }
 
   renderDirectories() {
+    let sortedElementList = new Array<JSX.Element>();
+    sortedElementList.sort((n1: JSX.Element,n2: JSX.Element) => {
+      if(n1.key < n2.key) {return -1;}
+      if(n1.key > n2.key) {return 1;}
+      return 0
+    })
     return this.elementList;
   }
 
   render() {
-    const { files, loading } = this.state;
-    return files.length && !loading ? (
+    const { elementNumberstoDisplay } = this.state;
+    return this.elementList.length === elementNumberstoDisplay ? (
       <div>{this.renderDirectories()}</div>
     ) : (
       <span>Loading...</span>

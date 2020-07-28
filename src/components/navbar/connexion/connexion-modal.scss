@@ -29,7 +29,7 @@
 
 .modal-main {
   position: fixed;
-  background: #f2f2f2;
+  background: #fafafa;
   width: 70%;
   height: 50%;
   left: 50%;
@@ -58,7 +58,7 @@
 .left {
   height: 100%;
   float:left;
-  width: 60%;
+  width: 50%;
   img {
     width:60%;
     margin-top: 10%;
@@ -68,12 +68,12 @@
 
 form {
   float: left;
-  width: 40%;
+  width: 50%;
   height: 100%;
   h4 {
     padding-top: 40px;
     color:  rgba(#000, .5);
-    height: 200px;
+    height: 30%;
     span {
       color:  rgba(#000, 1);
       font-weight:  700; 
@@ -84,7 +84,6 @@ form {
     opacity:  .65;
     font-weight:  400; 
     max-width:  200px; 
-    margin-bottom:  40px; 
   }
 }
 label {
@@ -92,12 +91,13 @@ label {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  height: 120px;
+  height: 20%;
   letter-spacing: 4px;
-  max-width: 80%;
-  background-color: #eaeaea;
+  max-width: 70%;
+  background-color: #ececec;
   transition: all .2s ease-in;
   margin-left: 4%;
+  border: 1px solid #d3d3d3;
   &.focused {
     background-color: white;
   }
@@ -113,7 +113,6 @@ label {
   .label-icon {
     flex-basis: auto;
     width: 60px;
-    height: 120px;
     margin-right: 10px;
     margin-left: 10px;
     svg {
@@ -124,15 +123,14 @@ label {
   .label-text {
     position: absolute;
     flex-basis: auto;
-    width: 300px;
+    width: 65%;
     color: gray;
     cursor: text;
     font-size: 16px;
-    height: 120px;
     text-transform: uppercase;
     transition: all 0.3s;
     left: 80px;
-    top:10px;
+    top:5px;
     z-index: 3;
   }
   
@@ -140,16 +138,17 @@ label {
     flex-basis: auto;
     background-color: transparent;
     border: 0;
-    border-bottom: 2px solid rgba($color: #777777, $alpha: 0.6);
     color: black;
     font-size: 22px;
     outline: 0;
     transition: all 0.3s;
     min-width: 50%;
+    max-width: 50%;
     z-index: 4;
+    border-bottom: 2px solid rgba($color: #777777, $alpha: 0.6);
     
     &:focus  {
-      min-width: 80%;
+      min-width: 65%;
       border-bottom: 2px solid rgba($color: #ffbe0b, $alpha: 0.6);
       
       & + .label-text {

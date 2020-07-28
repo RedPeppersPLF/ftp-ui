@@ -12,16 +12,16 @@ class FileTree extends React.Component<{path: string}, {fileTree: Array<string>,
     pathList = new Array<JSX.Element>();
 
     componentDidMount() {
-        console.log(this.props.path)
         this.setState((previousState, currentProps) => ({
-                fileTree: (Buffer.from(currentProps.path.substr(1),'base64').toString('utf-8')).split("/")
+                fileTree: Buffer.from(currentProps.path.replace("/",""), 'base64').toString('utf-8').split("/")
             }), () => {
+            let fullPath = "";
             this.state.fileTree.forEach((file: string, index: number) => {
-                console.log(file)
+                (index===0 || index===1)?fullPath += file:fullPath = fullPath+"/"+file;
                 this.pathList.push(
                     <div className="leaf" key={index}>
                         <ArrowForwardIosRoundedIcon style={{ fontSize: 30, color: "#646464" }}/>
-                        <a href={"/dashboard/"+((file==="" || index===0)?"":Buffer.from("/"+file).toString('base64'))}>{index===0?"home":file}</a>
+                        <a href={"/dashboard"+(file===""?"":"/"+Buffer.from("/"+fullPath).toString('base64'))}>{file===""?"home":file}</a>
                     </div>
                 )
                 this.setState({
