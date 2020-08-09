@@ -49,13 +49,15 @@ class Dashboard extends React.Component<{history: any, location: any, match: any
     return (
       <div className="dashboard">
         <FileTree path={this.state.path}/>
-        <DirectoryView path={this.state.path} files={this.state.files}/>
+        <div className="directory-view">
+          <DirectoryView path={this.state.path} files={this.state.files}/>
+        </div>
       </div>
     );
   }
 
   render() {
-    return (!!this.props.jwt) ? this.listDirectories() : "No Token";
+    return (!!this.props.jwt) ? this.listDirectories() : "";
   }
 }
 

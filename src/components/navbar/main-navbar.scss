@@ -3,15 +3,14 @@
   align-items: center;
   top: 0;
   width: 100vw;
-  height: 9vh;
-  line-height: 9vh;
-  position: fixed;
-  background-color: #ffbe0b;
+  height: 80px;
+  line-height: 80px;
   z-index: 2;
   h3 {
-    font-weight: 300;
+    font-weight: 600;
     margin-left: 40px;
     font-family: "Oswald", sans-serif;
+    color: black;
   }
   .navbar-buttons {
     margin-left: 78vw;

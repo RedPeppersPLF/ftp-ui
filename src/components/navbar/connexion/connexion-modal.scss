@@ -48,7 +48,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 91vh;
+  height: calc(100% - 80px);
   background: hsla(0, 100%, 0, 0.50);
   z-index: 2;
   box-shadow: inset 0 10px 30px #444444;
@@ -56,7 +56,6 @@
 
 .modal-main {
   position: fixed;
-  background: #fafafa;
   width: 70%;
   height: 50%;
   left: 50%;
@@ -104,22 +103,21 @@ form {
 
   h4 {
     padding-top: 40px;
-    color: rgba(#000, .5);
     height: 25%;
 
     span {
-      color: rgba(#000, 1);
       font-weight: 700;
     }
   }
 
   h5 {
+    font-weight: bold !important;
+    font-size: 1.3rem !important;
     color: rgba(#b50000, .5);
     height: 10%;
   }
 
   p {
-    color: #000;
     opacity: .65;
     font-weight: 400;
     max-width: 200px;
@@ -167,6 +165,7 @@ label, .label-error {
   .label-text {
     position: absolute;
     flex-basis: auto;
+    font-weight: bold;
     width: 65%;
     color: gray;
     cursor: text;
@@ -222,7 +221,6 @@ label, .label-error {
 }
 
 .login {
-  background-color: white;
   height: 5vh;
   width: 30%;
   position: relative;
@@ -242,7 +240,6 @@ label, .label-error {
 .logout {
   display: block;
   margin: 0 auto;
-  background-color: white;
   height: 5vh;
   width: 90%;
   border-radius: 10px;
