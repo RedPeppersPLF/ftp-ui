@@ -16,15 +16,42 @@
   }
 }
 
+@keyframes error {
+  0% {
+    margin-right: 0px;
+    margin-left: 20px;
+  }
+  20% {
+    margin-right: 20px;
+    margin-left: 0px;
+  }
+  40% {
+    margin-right: 0px;
+    margin-left: 20px;
+  }
+  60% {
+    margin-right: 20px;
+    margin-left: 0px;
+  }
+  80% {
+    margin-right: 0px;
+    margin-left: 20px;
+  }
+  100% {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+
 .modal {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 91.1vh;
+  height: 91vh;
   background: hsla(0, 100%, 0, 0.50);
   z-index: 2;
-  box-shadow: inset 0px 10px 30px #444444;
+  box-shadow: inset 0 10px 30px #444444;
 }
 
 .modal-main {
@@ -56,13 +83,17 @@
 }
 
 .left {
+  display: flex;
+  float: left;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  float:left;
   width: 50%;
+
   img {
-    width:60%;
-    margin-top: 10%;
-    margin-left: 20%;
+    width: 60%;
+    margin: 20%;
+    place-items: center;
   }
 }
 
@@ -70,56 +101,69 @@ form {
   float: left;
   width: 50%;
   height: 100%;
+
   h4 {
     padding-top: 40px;
-    color:  rgba(#000, .5);
-    height: 30%;
+    color: rgba(#000, .5);
+    height: 25%;
+
     span {
-      color:  rgba(#000, 1);
-      font-weight:  700; 
+      color: rgba(#000, 1);
+      font-weight: 700;
     }
   }
+
+  h5 {
+    color: rgba(#b50000, .5);
+    height: 10%;
+  }
+
   p {
-    color:  #000; 
-    opacity:  .65;
-    font-weight:  400; 
-    max-width:  200px; 
+    color: #000;
+    opacity: .65;
+    font-weight: 400;
+    max-width: 200px;
   }
 }
-label {
+
+label, .label-error {
   position: relative;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   height: 20%;
   letter-spacing: 4px;
-  max-width: 70%;
+  max-width: 80%;
   background-color: #ececec;
   transition: all .2s ease-in;
   margin-left: 4%;
   border: 1px solid #d3d3d3;
+
   &.focused {
     background-color: white;
   }
 
-  &:nth-child(2) {
+  &:nth-child(3) {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
   }
-  &:nth-child(3) {
+
+  &:nth-child(4) {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
   }
+
   .label-icon {
     flex-basis: auto;
     width: 60px;
     margin-right: 10px;
     margin-left: 10px;
+
     svg {
       vertical-align: middle;
     }
   }
-  
+
   .label-text {
     position: absolute;
     flex-basis: auto;
@@ -130,10 +174,10 @@ label {
     text-transform: uppercase;
     transition: all 0.3s;
     left: 80px;
-    top:5px;
+    top: 5px;
     z-index: 3;
   }
-  
+
   input {
     flex-basis: auto;
     background-color: transparent;
@@ -142,25 +186,91 @@ label {
     font-size: 22px;
     outline: 0;
     transition: all 0.3s;
-    min-width: 50%;
-    max-width: 50%;
+    min-width: 60%;
+    max-width: 60%;
     z-index: 4;
     border-bottom: 2px solid rgba($color: #777777, $alpha: 0.6);
-    
-    &:focus  {
+
+    &:focus {
       min-width: 65%;
       border-bottom: 2px solid rgba($color: #ffbe0b, $alpha: 0.6);
-      
+
       & + .label-text {
         color: gray;
         font-size: 10px;
-        transform :translateY(-25px);
+        transform: translateY(-25px);
       }
     }
-    
+
     &:valid + .label-text {
       font-size: 10px;
       transform: translateY(-25px);
     }
+  }
+}
+
+.label-error {
+  .label-icon {
+    animation: error .2s .2s linear;
+  }
+  input {
+    &:focus {
+      min-width: 65%;
+      border-bottom: 2px solid rgba($color: #b50000, $alpha: 0.6);
+    }
+  }
+}
+
+.login {
+  background-color: white;
+  height: 5vh;
+  width: 30%;
+  position: relative;
+  margin-left: 45%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s ease-in;
+  border: 2px solid #d3d3d3;
+  font-size: 100%;
+
+  &:hover {
+    background-color: #ffbe0b;
+    border: 2px solid #777780;
+  }
+}
+
+.logout {
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+  height: 5vh;
+  width: 90%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s ease-in;
+  border: 2px solid #d3d3d3;
+  font-size: 100%;
+
+  &:hover {
+    background-color: #ffbe0b;
+    border: 2px solid #777780;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .left {
+    width: 30%;
+  }
+  form {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .left {
+    display: none;
+  }
+  form {
+    width: 100%;
   }
 }

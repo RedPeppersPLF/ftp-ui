@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Box } from "@material-ui/core";
 import "components/dashboard/directoryView/directoryView.scss";
 import { FileType } from "./directoryView";
@@ -14,12 +14,13 @@ class DirectoryCheckbox extends React.Component<{index: number, name: string, ty
     checkClass: " "
   };
   
-  check(){
+  check(event: SyntheticEvent){
     this.setState((previousState) => ({
       checked: !previousState.checked,
       checkClass: !previousState.checked?" checked":" "
     }))
     document.getElementsByClassName("checkbox")[this.props.index].classList.toggle('checked');
+    console.log(event);
   }
   
   fetchThumbnail(name: string, type: number) {
@@ -46,7 +47,7 @@ class DirectoryCheckbox extends React.Component<{index: number, name: string, ty
   
   render() {
     return (
-      <Box className={"second"+this.state.checkClass} onClick={() => {this.check()}}>
+      <Box className={"second"+this.state.checkClass} onClick={this.check.bind(this)}>
       {this.fetchThumbnail(
         this.props.name,
         this.props.type

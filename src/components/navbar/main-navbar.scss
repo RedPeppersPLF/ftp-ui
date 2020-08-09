@@ -1,7 +1,7 @@
 .main-navbar {
   display: flex;
   align-items: center;
-  top: 0px;
+  top: 0;
   width: 100vw;
   height: 9vh;
   line-height: 9vh;
@@ -11,14 +11,14 @@
   h3 {
     font-weight: 300;
     margin-left: 40px;
-    font-family: "Oswald";
+    font-family: "Oswald", sans-serif;
   }
   .navbar-buttons {
     margin-left: 78vw;
     display: flex;
     align-items: center;
     position: absolute;
-    right: 0px;
+    right: 0;
   }
   .navbar-buttons-icon {
     margin: 0;
