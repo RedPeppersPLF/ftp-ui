@@ -8,27 +8,46 @@ import {
   PermIdentityOutlined,
 } from "@material-ui/icons";
 import ConnexionModal from "components/navbar/connexion/connexion-modal";
+import SettingsModal from "components/navbar/settings/settings-modal";
 import "./main-navbar.scss";
 import {connectToFtpServer, disconnectFromFtpServer} from "../../commons/axiosInstance";
-import {getJwt} from "../../helpers/jwt";
+import {getTheme} from "../../helpers/theme";
 
-class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
-  { modalIsOpen: boolean; className: string, userInputFocused: boolean, passwordInputFocused: boolean, loginMessage: string }> {
+class MainNavBar extends React.Component<{ handleJwt: (jwt: string | null) => void, handleTheme: () => void, jwt: string | null },
+  { modalIsOpen: boolean, modalSettingsIsOpen: boolean, className: string, modalSettingsClassName: string, userInputFocused: boolean, passwordInputFocused: boolean, loginMessage: string}> {
   state = {
     modalIsOpen: false,
+    modalSettingsIsOpen: false,
     className: "",
+    modalSettingsClassName: "",
     userInputFocused: false,
     passwordInputFocused: false,
-    loginMessage: ""
+    loginMessage: "",
   };
 
-  jwt = getJwt()
   loginError = ""
 
   componentDidMount() {
-    if (!this.jwt) {
-      this.handleModal()
+    window.addEventListener('keydown', this.handleKeyPressed.bind(this), false)
+    if (!this.props.jwt) {
+      this.handleLoginModal()
     }
+    setInterval(
+      () => {
+        if(!this.props.jwt && !this.state.modalIsOpen) {
+          this.updateModal()
+        }
+      },
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPressed.bind(this), false)
+  }
+
+  updateModal() {
+    this.handleLoginModal()
   }
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -37,21 +56,22 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
     const formData = new FormData(form)
     connectToFtpServer(formData).then((response) => {
       this.props.handleJwt(response.data)
-      this.setState(() => ({loginMessage: ""}))
-      this.handleModal()
+      this.setState(() => ({
+        loginMessage: "",
+      }))
+      this.handleLoginModal()
     }).catch((error) => {
       this.loginError = error.message
       if (this.loginError === "Request failed with status code 530") {
         this.setState(() => ({loginMessage: "Identifiant ou mot de passe incorrect"}))
       }
     })
-    this.jwt = getJwt()
   };
 
   handleLogout() {
-    disconnectFromFtpServer(this.jwt)
-    this.props.handleJwt("")
-    this.handleModal()
+    disconnectFromFtpServer(this.props.jwt)
+    this.props.handleJwt(null)
+    this.handleLoginModal()
   }
 
   renderErrorLoginForm() {
@@ -88,7 +108,7 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
     const {userInputFocused, passwordInputFocused} = this.state;
     return (
       <>
-        <label className={userInputFocused ? "focused" : ""}>
+        <label className={userInputFocused ? "login-label focused" : "login-label"}>
           <div className="label-icon">
             <PermIdentityOutlined style={{fontSize: 50, color: "#808080"}}/>
           </div>
@@ -99,7 +119,7 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
           }} required/>
           <div className="label-text">Identifiant</div>
         </label>
-        <label className={passwordInputFocused ? "focused" : ""}>
+        <label className={passwordInputFocused ? "login-label focused" : "login-label"}>
           <div className="label-icon">
             <LockOutlined style={{fontSize: 50, color: "#808080"}}/>
           </div>
@@ -114,7 +134,7 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
     )
   }
 
-  handleModal() {
+  handleLoginModal() {
     if (!this.state.modalIsOpen) {
       this.setState((previousState) => ({
         modalIsOpen: !previousState.modalIsOpen,
@@ -130,10 +150,40 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
             this.setState((previousState) => ({
               modalIsOpen: !previousState.modalIsOpen,
             }));
-            this.jwt = getJwt()
           }, 210);
         }
       );
+    }
+  }
+
+  handleSettingsModal() {
+    if (!this.state.modalSettingsIsOpen) {
+      this.setState((previousState) => ({
+        modalSettingsIsOpen: !previousState.modalSettingsIsOpen,
+        modalSettingsClassName: "settings-main appear",
+      }));
+    } else if (this.state.modalSettingsIsOpen) {
+      this.setState(
+        {
+          modalSettingsClassName: "settings-main disappear",
+        },
+        () => {
+          setTimeout(() => {
+            this.setState((previousState) => ({
+              modalSettingsIsOpen: !previousState.modalSettingsIsOpen,
+            }));
+          }, 210);
+        }
+      );
+    }
+  }
+
+  handleKeyPressed(event: KeyboardEvent) {
+    if (this.state.modalIsOpen && event.key === "Escape") {
+      this.handleLoginModal()
+    }
+    if (this.state.modalSettingsIsOpen && event.key === "Escape") {
+      this.handleSettingsModal()
     }
   }
 
@@ -159,14 +209,14 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
   }
 
   renderLoginForm() {
-    const { loginMessage } = this.state
+    const {loginMessage} = this.state
     return (
       <form onSubmit={this.handleSubmit.bind(this)} id="login-form" className="log-in" autoComplete="off">
         <Typography variant="h4">
           Page de <span>Connexion</span>
         </Typography>
         <Typography variant="h5">{loginMessage}</Typography>
-        {loginMessage===""?this.renderNoErrorLoginForm():this.renderErrorLoginForm()}
+        {loginMessage === "" ? this.renderNoErrorLoginForm() : this.renderErrorLoginForm()}
         <input className="login" type="submit" value="Connexion"/>
       </form>)
   }
@@ -186,26 +236,43 @@ class MainNavBar extends React.Component<{ handleJwt: (jwt: string) => void },
   }
 
   render() {
-    const {modalIsOpen, className} = this.state;
+    const {modalIsOpen, modalSettingsIsOpen, modalSettingsClassName, className} = this.state;
+    if (modalIsOpen || modalSettingsIsOpen) {
+      document.body.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    } else {
+      document.body.style.overflow = 'unset';
+    }
     return (
       <Box className="main-navbar">
-        <Typography variant="h3">FTP Drive</Typography>
+        <Typography variant="h3"><a href="/dashboard">FTP Drive</a></Typography>
         <Box className="navbar-buttons">
-          <div className="navbar-buttons-icon">
+          <div className="navbar-buttons-icon" onClick={this.handleSettingsModal.bind(this)}>
             <SettingsTwoTone style={{fontSize: 40, color: "#646464"}}/>
           </div>
+          <SettingsModal show={modalSettingsIsOpen} handleSettingsModal={this.handleSettingsModal}>
+            <div className={modalSettingsClassName}>
+              <div className="wrapper">
+                <p>Theme :</p>
+                <span className="switcher switcher-1">
+                   <input type="checkbox" checked={getTheme()==="light"} onChange={this.props.handleTheme}/>
+                   <label className="switcher-label"></label>
+                </span>
+              </div>
+            </div>
+          </SettingsModal>
           <div
-            onClick={this.handleModal.bind(this)}
             className="navbar-buttons-icon"
+            onClick={this.handleLoginModal.bind(this)}
           >
             <PermIdentityTwoTone style={{fontSize: 40, color: "#646464"}}/>
           </div>
-          <ConnexionModal show={modalIsOpen} handleModal={this.handleModal}>
+          <ConnexionModal show={modalIsOpen}>
             <div className={className}>
               <div className="left">
                 <img alt="" src={Cloud}/>
               </div>
-              {this.jwt ? this.renderLogoutForm() : this.renderLoginForm()}
+              {this.props.jwt ? this.renderLogoutForm() : this.renderLoginForm()}
             </div>
           </ConnexionModal>
         </Box>

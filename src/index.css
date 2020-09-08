@@ -3,22 +3,20 @@
 
 * {
     font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 400;
-    box-sizing: border-box;
 }
 body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: auto;
-    -ms-overflow-style: auto
+    box-sizing: border-box;
 }
 .App {
     position: relative;
-}
-.dashboard {
-    margin-top: 60px;
+    overflow-x: hidden;
 }
 .directory-view {
-    margin-top: 30px;
+    margin: 30px auto;
+    width: 100%;
+    height: auto;
 }

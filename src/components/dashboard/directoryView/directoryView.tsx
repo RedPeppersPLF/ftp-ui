@@ -1,7 +1,7 @@
-import React from "react";
+import React, {SyntheticEvent} from "react";
 import {Box} from "@material-ui/core";
 import "components/dashboard/directoryView/directoryView.scss";
-import DirectoryCheckbox from "./directoryCheckbox";
+import ElementCheckbox from "./elementCheckbox";
 import Tick from "assets/icons/tick.svg";
 
 export enum FileType {
@@ -19,48 +19,21 @@ type FileInfos = {
   modifiedAt: string;
 };
 
-class DirectoryView extends React.Component<{ path: string, files: Array<FileInfos>},{ listLoading: boolean, path: string }> {
+class DirectoryView extends React.Component<{ path: string, files: Array<FileInfos>, handleItemsChecked: (item: FileInfos, checked: boolean) => void},{ path: string, elementChecked: boolean[] }> {
   state = {
-    listLoading: true,
-    path: this.props.path
+    path: this.props.path,
+    elementChecked: new Array<boolean>(this.props.files.length).fill(false)
   };
 
   elementList = new Array<JSX.Element>();
 
-  componentDidMount() {
-      const dataFromServer = this.props.files
-        .sort((file1, file2) => {
-          return file1.name.localeCompare(file2.name)
-        })
-        .map((item, i) =>
-          <Box key={i} className="element-wrapper">
-            <div className="first">
-              <div className="checkbox">
-                <img alt="checked" src={Tick}/>
-              </div>
-              <div className="menu">
-                <div className="el"></div>
-                <div className="el"></div>
-                <div className="el"></div>
-              </div>
-            </div>
-            <DirectoryCheckbox
-              index={i}
-              name={`${this.state.path}/${item.name}`}
-              type={item.type}
-            />
-            <div className="third">
-              <p className="element-name">
-                {item.name}
-              </p>
-              <p className="element-size">{this.numberToReadableSize(item.size)}</p>
-            </div>
-          </Box>
-        );
-      this.setState(() => ({
-        listLoading: false
-      }))
-      this.elementList = dataFromServer
+  toggleCheck(event: SyntheticEvent, item: FileInfos){
+    const { elementChecked } = this.state
+    !elementChecked[Number.parseInt(event.currentTarget.classList[3])]?this.props.handleItemsChecked(item, true):this.props.handleItemsChecked(item, false)
+    elementChecked[Number.parseInt(event.currentTarget.classList[3])] = !elementChecked[Number.parseInt(event.currentTarget.classList[3])]
+    this.setState(() => ({
+      elementChecked: elementChecked
+    }))
   }
 
   numberToReadableSize(size: number) {
@@ -80,8 +53,36 @@ class DirectoryView extends React.Component<{ path: string, files: Array<FileInf
   }
 
   render() {
-    const {listLoading} = this.state
-    return (listLoading)?"":this.renderElementList()
+    this.elementList = this.props.files
+      .sort((file1, file2) => {
+        return file1.name.localeCompare(file2.name)
+      })
+      .map((item, i) =>
+        <Box component={"div"} key={i} className={`element-wrapper ${i} ${this.state.elementChecked[i] ? "checked" : ""}`} onClick={(event: SyntheticEvent<Element, Event>) => {this.toggleCheck(event, item)}}>
+          <div className="first">
+            <div className="checkbox">
+              <img alt="" src={Tick}/>
+            </div>
+            <div className="menu">
+              <div className="el"/>
+              <div className="el"/>
+              <div className="el"/>
+            </div>
+          </div>
+          <ElementCheckbox
+            index={i}
+            name={`${this.state.path}/${item.name}`}
+            type={item.type}
+          />
+          <div className="third">
+            <p className="element-name">
+              {item.name}
+            </p>
+            <p className="element-size">{this.numberToReadableSize(item.size)}</p>
+          </div>
+        </Box>
+      )
+    return this.renderElementList()
   }
 }
 

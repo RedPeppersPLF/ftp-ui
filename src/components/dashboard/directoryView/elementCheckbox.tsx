@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { Box } from "@material-ui/core";
 import "components/dashboard/directoryView/directoryView.scss";
 import { FileType } from "./directoryView";
@@ -7,21 +7,7 @@ import Txt from "assets/icons/txt.png";
 import File from "assets/icons/file.svg";
 import Folder from "assets/icons/folder.svg"
 
-class DirectoryCheckbox extends React.Component<{index: number, name: string, type: FileType}, { checked: boolean, checkClass: string }> {
-  
-  state = {
-    checked: false,
-    checkClass: " "
-  };
-  
-  check(event: SyntheticEvent){
-    this.setState((previousState) => ({
-      checked: !previousState.checked,
-      checkClass: !previousState.checked?" checked":" "
-    }))
-    document.getElementsByClassName("checkbox")[this.props.index].classList.toggle('checked');
-    console.log(event);
-  }
+class ElementCheckbox extends React.Component<{index: number, name: string, type: FileType}, {}> {
   
   fetchThumbnail(name: string, type: number) {
     const regex = /(?:\.([^.]+))?$/;
@@ -47,7 +33,7 @@ class DirectoryCheckbox extends React.Component<{index: number, name: string, ty
   
   render() {
     return (
-      <Box className={"second"+this.state.checkClass} onClick={this.check.bind(this)}>
+      <Box className="second">
       {this.fetchThumbnail(
         this.props.name,
         this.props.type
@@ -56,4 +42,4 @@ class DirectoryCheckbox extends React.Component<{index: number, name: string, ty
   }
 }
 
-export default DirectoryCheckbox;
+export default ElementCheckbox;

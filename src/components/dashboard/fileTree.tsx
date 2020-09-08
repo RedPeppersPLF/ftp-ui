@@ -12,7 +12,7 @@ class FileTree extends React.Component<{ path: string }, { fileTree: Array<strin
 
   handleScroll() {
     const offset=window.scrollY;
-    if(offset > 80 ){
+    if(offset > 65 ){
       this.setState(() => ({
         scrolled: true
       }));

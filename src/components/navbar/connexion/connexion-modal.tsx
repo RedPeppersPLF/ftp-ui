@@ -1,7 +1,7 @@
 import React from "react";
 import "./connexion-modal.scss"
 
-class ConnexionModal extends React.Component<{show: boolean, handleModal: () => void, children: JSX.Element},{}> {
+class ConnexionModal extends React.Component<{show: boolean, children: JSX.Element},{}> {
 
   render()  {
     const hideShowModal = this.props.show?"modal display-block":"modal display-none";

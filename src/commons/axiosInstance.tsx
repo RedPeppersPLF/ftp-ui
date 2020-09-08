@@ -3,7 +3,7 @@ import Axios from "axios";
 const querystring = require("querystring");
 
 const instance = Axios.create({
-  baseURL: "http://192.168.1.68:8080",
+  baseURL: "http://localhost:8080",
   timeout: 10000,
   headers: {
     accept: "*/*",
@@ -17,6 +17,22 @@ function listAllDirectoriesOnWorkspace(path: string, jwt: string) {
     data,
     {headers: {Authorization: jwt}}
   );
+}
+
+function uploadFileToFtpServer(jwt: string | null, formData: FormData) {
+  return instance.post(
+    "ftp-back/ftp/upload",
+    formData,
+    {headers: {Authorization: jwt}}
+  )
+}
+
+function deleteFileFromFtpServer(jwt: string | null, formData: FormData) {
+  return instance.post(
+    "ftp-back/ftp/delete",
+    formData,
+    {headers: {Authorization: jwt}}
+  )
 }
 
 function connectToFtpServer(formData: FormData) {
@@ -37,4 +53,4 @@ function disconnectFromFtpServer(jwt: string | null) {
   )
 }
 
-export {listAllDirectoriesOnWorkspace, connectToFtpServer, disconnectFromFtpServer};
+export {listAllDirectoriesOnWorkspace, connectToFtpServer, disconnectFromFtpServer, uploadFileToFtpServer, deleteFileFromFtpServer};
