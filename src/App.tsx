@@ -31,6 +31,7 @@ export const GlobalStyles = createGlobalStyle<Props>`
     &.sticky {
       background: ${({theme}) => theme.main};
       button {
+        background: ${({theme}) => theme.main};
         color: ${({theme}) => theme.backgroundColor};
         &:hover {
           background-color: ${({theme}) => theme.hoverMain};
@@ -41,7 +42,7 @@ export const GlobalStyles = createGlobalStyle<Props>`
       }
     }
     button {
-      background-color: rgba(0,0,0,0);
+      background: ${({theme}) => theme.altBackgroundColor};
       color: ${({theme}) => theme.textColor};
       &.disabled {
         color: ${({theme}) => theme.altTextColor};

@@ -4,7 +4,7 @@ import Add from "assets/icons/plus.png"
 import Download from "assets/icons/double-bas.png"
 import Delete from "assets/icons/multiplier.png"
 import Details from "assets/icons/details.png"
-import {deleteFileFromFtpServer, uploadFileToFtpServer} from "../../commons/axiosInstance";
+import {deleteFileFromFtpServer, createDirOnFtpServer, uploadFileToFtpServer} from "../../commons/axiosInstance";
 import {getJwt} from "../../helpers/jwt";
 import {FileType} from "../dashboard/directoryView/directoryView";
 
@@ -71,6 +71,7 @@ class SecondNavbar extends React.Component<{path: string, handleNewFile: () => v
         const data = new FormData()
         data.append("fileName", this.props.itemChecked[i].name)
         data.append("ftpPath", this.props.path)
+        data.append("itemType", this.props.itemChecked[i].type.toString())
         const ftpResponse = await deleteFileFromFtpServer(getJwt(), data).then(res => {
           return res.data.ftpResponse
         })
@@ -80,6 +81,22 @@ class SecondNavbar extends React.Component<{path: string, handleNewFile: () => v
           console.log(ftpResponse)
         }
       }
+    })();
+  }
+
+  handleCreateDir() {
+    (async() => {
+        const data = new FormData()
+        data.append("ftpPath", this.props.path)
+        data.append("dirName", "test")
+        const ftpResponse = await createDirOnFtpServer(getJwt(), data).then(res => {
+          return res.data.ftpResponse
+        })
+        if(ftpResponse === 257){
+          this.props.handleNewFile()
+        } else {
+          console.log(ftpResponse)
+        }
     })();
   }
 

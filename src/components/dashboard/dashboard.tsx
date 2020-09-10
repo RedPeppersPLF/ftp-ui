@@ -30,14 +30,15 @@ function pathToUTF8(path: string) {
 class Dashboard extends React.Component<{history: any, location: any, match: any, jwt: string | null, handleJwt: (jwt: string | null) => void},{ files: Array<FileInfos>, checkedFiles: Array<FileInfos>, loading: boolean, path: string}> {
   state = {
     files: new Array<FileInfos>(),
-    checkedFiles : new Array<FileInfos>(),
+    checkedFiles: new Array<FileInfos>(),
     loading: true,
     path: removeDashboardPathFromPath(this.props.location.pathname).substr(0, 1) === "/" ? pathToUTF8(removeDashboardPathFromPath(this.props.location.pathname).substr(1)) : pathToUTF8(removeDashboardPathFromPath(this.props.location.pathname)),
   };
 
   handleNewFile() {
     this.setState(() => ({
-      loading: true
+      loading: true,
+      checkedFiles: new Array<FileInfos>()
     }))
   }
 

@@ -35,6 +35,14 @@ function deleteFileFromFtpServer(jwt: string | null, formData: FormData) {
   )
 }
 
+function createDirOnFtpServer(jwt: string | null, formData: FormData) {
+  return instance.post(
+    "ftp-back/ftp/createDir",
+    formData,
+    {headers: {Authorization: jwt}}
+  )
+}
+
 function connectToFtpServer(formData: FormData) {
   let object = new Map()
   formData.forEach((value, key) => {object.set(key,value)});
@@ -53,4 +61,4 @@ function disconnectFromFtpServer(jwt: string | null) {
   )
 }
 
-export {listAllDirectoriesOnWorkspace, connectToFtpServer, disconnectFromFtpServer, uploadFileToFtpServer, deleteFileFromFtpServer};
+export {listAllDirectoriesOnWorkspace, connectToFtpServer, createDirOnFtpServer, disconnectFromFtpServer, uploadFileToFtpServer, deleteFileFromFtpServer};
