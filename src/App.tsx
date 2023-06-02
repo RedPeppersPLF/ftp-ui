@@ -2,7 +2,9 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
+  Routes,
+  Navigate,
+  useLocation
 } from "react-router-dom";
 import Dashboard from 'components/dashboard/dashboard'
 import MainNavBar from "components/navbar/main-navbar";
@@ -110,17 +112,17 @@ class App extends React.Component<{}, { jwt: string | null, theme: ThemeType }> 
 
   render() {
     const {jwt, theme} = this.state
+    let location = useLocation()
     return (
       <div className="App" id="App">
         <GlobalStyles theme={theme}/>
         <MainNavBar handleTheme={this.handleTheme.bind(this)} jwt={jwt} handleJwt={this.handleJwt.bind(this)}/>
         <Router>
-          <Switch>
-            <Route path="/dashboard" render={(props) => (
-              <Dashboard {...props} jwt={jwt} handleJwt={this.handleJwt.bind(this)}/>
-            )}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" />}/>
+            <Route path="/dashboard" element={(location: Location) => <Dashboard location={location} jwt={jwt} handleJwt={this.handleJwt.bind(this)}/>}>
             </Route>
-          </Switch>
+          </Routes>
         </Router>
       </div>
     );

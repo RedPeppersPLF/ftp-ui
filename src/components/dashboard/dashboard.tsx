@@ -27,7 +27,7 @@ function pathToUTF8(path: string) {
   return Buffer.from(path, 'base64').toString('utf-8')
 }
 
-class Dashboard extends React.Component<{history: any, location: any, match: any, jwt: string | null, handleJwt: (jwt: string | null) => void},{ files: Array<FileInfos>, checkedFiles: Array<FileInfos>, loading: boolean, path: string}> {
+class Dashboard extends React.Component<{location: any, jwt: string | null, handleJwt: (jwt: string | null) => void},{ files: Array<FileInfos>, checkedFiles: Array<FileInfos>, loading: boolean, path: string}> {
   state = {
     files: new Array<FileInfos>(),
     checkedFiles: new Array<FileInfos>(),
