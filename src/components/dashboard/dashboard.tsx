@@ -20,11 +20,12 @@ type FileInfos = {
 };
 
 function removeDashboardPathFromPath(path: string) {
-  return path.replace("/dashboard", "");
+  if (path) return path.replace("/dashboard", "");
+  return ""
 }
 
 function pathToUTF8(path: string) {
-  return Buffer.from(path, 'base64').toString('utf-8')
+  return path
 }
 
 class Dashboard extends React.Component<{location: any, jwt: string | null, handleJwt: (jwt: string | null) => void},{ files: Array<FileInfos>, checkedFiles: Array<FileInfos>, loading: boolean, path: string}> {

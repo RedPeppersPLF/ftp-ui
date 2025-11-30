@@ -1,44 +1,46 @@
 import axios from "axios";
 
-const querystring = require("querystring");
-
 function listAllDirectoriesOnWorkspace(path: string, jwt: string) {
-  const data = querystring.stringify({'path': path});
+  const headers = {'Authorization': `${jwt}`, 'Accept': 'application/json'}
+  const data = {'path': path};
   return axios.post(
     "http://localhost:8080/ftp-back/ftp/list",
     data,
-    {headers: {Authorization: jwt}}
+    {headers: headers}
   );
 }
 
 function uploadFileToFtpServer(jwt: string | null, formData: FormData) {
+  const headers = {'Authorization': `${jwt}`}
   return axios.post(
     "http://localhost:8080/ftp-back/ftp/upload",
     formData,
-    {headers: {Authorization: jwt}}
+    {headers: headers}
   )
 }
 
 function deleteFileFromFtpServer(jwt: string | null, formData: FormData) {
+  const headers = {'Authorization': `${jwt}`}
   return axios.post(
     "http://localhost:8080/ftp-back/ftp/delete",
     formData,
-    {headers: {Authorization: jwt}}
+    {headers: headers}
   )
 }
 
 function createDirOnFtpServer(jwt: string | null, formData: FormData) {
+  const headers = {'Authorization': `${jwt}`}
   return axios.post(
     "http://localhost:8080/ftp-back/ftp/createDir",
     formData,
-    {headers: {Authorization: jwt}}
+    {headers: headers}
   )
 }
 
 function connectToFtpServer(formData: FormData) {
   let object = new Map()
   formData.forEach((value, key) => {object.set(key,value)});
-  const data = querystring.stringify({'username': object.get("username"), 'password': object.get("password")});
+  const data = {'username': object.get("username"), 'password': object.get("password")};
   return axios.post(
     "/http://localhost:8080/ftp-back/auth/login",
     data
@@ -46,10 +48,11 @@ function connectToFtpServer(formData: FormData) {
 }
 
 function disconnectFromFtpServer(jwt: string | null) {
+  const headers = {'Authorization': `${jwt}`}
   return axios.post(
     "/http://localhost:8080/ftp-back/auth/logout",
     null,
-    {headers: {Authorization: jwt}}
+    {headers: headers}
   )
 }
 
